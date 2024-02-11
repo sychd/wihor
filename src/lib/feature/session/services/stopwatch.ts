@@ -16,9 +16,8 @@ interface StopwatchService {
 	round: () => void;
 	getRounds: () => RoundsData;
 	isStopped: boolean;
-	isPaused: () => boolean;
+	isPaused: boolean;
 	ms: number;
-	getRelativeTime: (relativeToMs: number, roundId?: number) => number;
 }
 
 const MS = 1;
@@ -41,7 +40,6 @@ export default function useStopwatch(onUpdate: (ms: number) => void = () => 0): 
 	};
 
 	const start = () => {
-		console.log('start', elapsedTime);
 		if (!isRunning) {
 			startTime = Date.now() - elapsedTime;
 			intervalId = setInterval(() => {
@@ -54,7 +52,6 @@ export default function useStopwatch(onUpdate: (ms: number) => void = () => 0): 
 	};
 
 	const pause = () => {
-		console.log('pause', elapsedTime);
 		if (isRunning && !isPaused) {
 			isPaused = true;
 			isRunning = false;
@@ -87,15 +84,6 @@ export default function useStopwatch(onUpdate: (ms: number) => void = () => 0): 
 
 	const isStopped = !isRunning && !isPaused;
 
-	const getRelativeTime = (relativeToMs: number, roundId?: number): number => {
-		if (roundId !== undefined && rounds.rounds[roundId]) {
-			const round = rounds.rounds[roundId];
-			return round.end !== null ? round.end - round.start : Date.now() - round.start;
-		} else {
-			return Date.now() - startTime;
-		}
-	};
-
 	return {
 		reset,
 		start,
@@ -104,8 +92,7 @@ export default function useStopwatch(onUpdate: (ms: number) => void = () => 0): 
 		round,
 		getRounds,
 		isStopped,
-		isPaused: () => isPaused,
-		ms: elapsedTime,
-		getRelativeTime
+		isPaused,
+		ms: elapsedTime
 	};
 }

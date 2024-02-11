@@ -1,5 +1,5 @@
 export default function useTimespanFormatter() {
-	function mmss(ms: number) {
+	function mmss(ms: number): string {
 		const totalSeconds = Math.floor(ms / 1000);
 		const minutes = Math.floor(totalSeconds / 60);
 		const seconds = totalSeconds % 60;
@@ -7,5 +7,9 @@ export default function useTimespanFormatter() {
 		return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 	}
 
-	return { mmss };
+	function relative(ms: number, divideToMs: number): string {
+		return (Math.floor(ms / divideToMs) + 1).toString();
+	}
+
+	return { mmss, relative };
 }
